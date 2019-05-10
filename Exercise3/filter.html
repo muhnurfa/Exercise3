@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        h2 {
+            font-size: 2rem;
+            margin: auto;
+            color: aliceblue;
+        }
+
+        table, th, td {
+            border: 1px solid rgb(219, 70, 70);
+            padding: 10px 3px;
+            text-align: center;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        tr {
+            color:cornsilk;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(179, 165, 165, 0.322);
+        }
+        
+
+        th {
+            font-weight:bold;
+            background-color: rgb(223, 135, 21);
+            color: rgb(37, 16, 85);
+            padding: 10px;
+        }
+
+        input {
+            margin-left: 150px;
+            margin-bottom: 20px;
+            margin-top: 25px;
+        }
+
+        #header {
+            padding: 25px 25px;
+            text-align: center; 
+            
+        }
+
+    </style>
+</head>
+
+<body background="glx.jpg">
+    <header>
+        <div id="header">
+            <h2>
+                Planet Properties Filtering
+            </h2>
+        </div>
+    </header>
+    <label></label>
+    <input type="text" id="input1" onkeyup="nameFtr()" placeholder="Search for names..">
+    <input type="text" id="input2" onkeyup="climateFtr()" placeholder="Search for climate..">
+    <input type="text" id="input3" onkeyup="gravityFtr()" placeholder="Search for gravity..">
+    <input type="text" id="input4" onkeyup="terrainFtr()" placeholder="Search for terrain..">
+    <div id="showData"></div>
+</body>
+
+<script>
+    function createTable() {
+        var planet = [
+            {
+                "name": "Alderaan", 
+                "rotation_period": "24", 
+                "orbital_period": "364", 
+                "diameter": "12500", 
+                "climate": "temperate", 
+                "gravity": "1 standard", 
+                "terrain": "grasslands, mountains", 
+                "surface_water": "40"
+            }, 
+            {
+                "name": "Yavin IV", 
+                "rotation_period": "24", 
+                "orbital_period": "4818", 
+                "diameter": "10200", 
+                "climate": "temperate, tropical", 
+                "gravity": "1 standard", 
+                "terrain": "jungle, rainforests", 
+                "surface_water": "8"
+            }, 
+            {
+                "name": "Hoth", 
+                "rotation_period": "23", 
+                "orbital_period": "549", 
+                "diameter": "7200", 
+                "climate": "frozen", 
+                "gravity": "1.1 standard", 
+                "terrain": "tundra, ice caves, mountain ranges", 
+                "surface_water": "100",    
+            }, 
+            {
+                "name": "Dagobah", 
+                "rotation_period": "23", 
+                "orbital_period": "341", 
+                "diameter": "8900", 
+                "climate": "murky", 
+                "gravity": "N/A", 
+                "terrain": "swamp, jungles", 
+                "surface_water": "8", 
+            }, 
+            {
+                "name": "Bespin", 
+                "rotation_period": "12", 
+                "orbital_period": "5110", 
+                "diameter": "118000", 
+                "climate": "temperate", 
+                "gravity": "1.5 (surface), 1 standard (Cloud City)", 
+                "terrain": "gas giant", 
+                "surface_water": "0",                
+            }, 
+            {
+                "name": "Endor", 
+                "rotation_period": "18", 
+                "orbital_period": "402", 
+                "diameter": "4900", 
+                "climate": "temperate", 
+                "gravity": "0.85 standard", 
+                "terrain": "forests, mountains, lakes", 
+                "surface_water": "8"
+            }, 
+            {
+                "name": "Naboo", 
+                "rotation_period": "26", 
+                "orbital_period": "312", 
+                "diameter": "12120", 
+                "climate": "temperate", 
+                "gravity": "1 standard", 
+                "terrain": "grassy hills, swamps, forests, mountains", 
+                "surface_water": "12", 
+            }, 
+            {
+                "name": "Coruscant", 
+                "rotation_period": "24", 
+                "orbital_period": "368", 
+                "diameter": "12240", 
+                "climate": "temperate", 
+                "gravity": "1 standard", 
+                "terrain": "cityscape, mountains", 
+                "surface_water": "unknown"
+            }, 
+            {
+                "name": "Kamino", 
+                "rotation_period": "27", 
+                "orbital_period": "463", 
+                "diameter": "19720", 
+                "climate": "temperate", 
+                "gravity": "1 standard", 
+                "terrain": "ocean", 
+                "surface_water": "100" 
+            }, 
+            {
+                "name": "Geonosis", 
+                "rotation_period": "30", 
+                "orbital_period": "256", 
+                "diameter": "11370", 
+                "climate": "temperate, arid", 
+                "gravity": "0.9 standard", 
+                "terrain": "rock, desert, mountain, barren", 
+                "surface_water": "5"
+            }
+        ]
+
+    // EXTRACT VALUE FOR HTML HEADER. 
+        var col = [];
+        for (var i = 0; i < planet.length; i++) {
+            for (var key in planet[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+    // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+        
+    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+        var header = table.createTHead ("thead");
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            header.appendChild(th);
+        }
+
+    // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < planet.length; i++) {
+            tr = table.insertRow();
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell();
+                tabCell.innerHTML = planet[i][col[j]];
+            }
+        }
+
+    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+    }
+
+    createTable();
+    
+    function nameFtr() {
+    // Declare variables 
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("input1");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("showData");
+        tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {  
+                            tr[i].style.display = "";
+                            } 
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                } 
+        }
+    }
+
+    function climateFtr() {
+    // Declare variables 
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("input2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("showData");
+        tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[4];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } 
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                } 
+        }
+    }   
+
+    function gravityFtr() {
+    // Declare variables 
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("input3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("showData");
+        tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[5];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } 
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                } 
+        }     
+    }   
+
+    function terrainFtr() {
+    // Declare variables 
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("input4");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("showData");
+        tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } 
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                } 
+        }   
+    }
+
+</script>
+</html>
